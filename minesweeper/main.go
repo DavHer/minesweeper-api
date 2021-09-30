@@ -19,4 +19,10 @@ func main() {
 	}
 
 	fmt.Println(game.String())
+
+	game.revealCell(0, 2)
+	game.revealCell(0, 3)
+	game.revealCell(0, 4)
+
+	fmt.Println(game.String())
 }

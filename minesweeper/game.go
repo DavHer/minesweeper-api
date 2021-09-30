@@ -121,6 +121,8 @@ func (g *Game) String() (string, error) {
 				str += "m "
 			} else if cell.IsFlagged {
 				str += "f "
+			} else if cell.IsClicked {
+				str += "c "
 			} else {
 				str += fmt.Sprintf("%d ", cell.Value)
 			}
@@ -131,14 +133,29 @@ func (g *Game) String() (string, error) {
 	return string(enc) + str, nil
 }
 
-/*
-str := fmt.Sprintf("Id: %b\n", g.Id)
-	str += fmt.Sprintf("Rows: %b\n", g.Rows)
-	str += fmt.Sprintf("Cols: %b\n", g.Cols)
-	str += fmt.Sprintf("Mines: %b\n", g.Mines)
-	str += fmt.Sprintf("NumClicks: %b\n", g.NumClicks)
-	str += fmt.Sprintf("State: %b\n", g.State)
-	str += fmt.Sprintf("Board: \n")
+func (g *Game) revealCell(row, col int) error {
+	if g.Board[row][col].IsClicked {
+		return errors.New("Cell already clicked")
+	}
+	g.Board[row][col].IsClicked = true
 
-	return fmt.Sprintf("%b", g)
-*/
+	if !g.Board[row][col].IsMine {
+		g.NumClicks += 1
+		if g.NumClicks == ((g.Rows * g.Cols) - g.Mines) {
+			g.State = "won"
+		}
+	} else {
+		g.State = "exploded"
+	}
+
+	return nil
+}
+
+func (g *Game) flagCell(row, col int) error {
+	if g.Board[row][col].IsClicked {
+		return errors.New("Cell already clicked")
+	}
+	g.Board[row][col].IsFlagged = true
+
+	return nil
+}
