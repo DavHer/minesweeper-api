@@ -9,24 +9,24 @@ curl http://localhost:8080/minesweeper \
     --data '{"rows": 5, "cols": 5, "mines": 5}'
 
 Get game
-curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc
+curl http://localhost:8080/minesweeper/e8a3f0be-2915-44f0-a920-fd8f71ae19e0
 
 
 Start game
-curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc/start \
+curl http://localhost:8080/minesweeper/e8a3f0be-2915-44f0-a920-fd8f71ae19e0/start \
     --include \
     --header "Content-Type: application/json" \
     --request "POST"
 
 Reveal cell
-curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc/reveal \
+curl http://localhost:8080/minesweeper/e8a3f0be-2915-44f0-a920-fd8f71ae19e0/reveal \
     --include \
     --header "Content-Type: application/json" \
     --request "POST" \
     --data '{"row": 0, "col": 0}'
 
 Flag cell
-curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc/flag \
+curl http://localhost:8080/minesweeper/e8a3f0be-2915-44f0-a920-fd8f71ae19e0/flag \
     --include \
     --header "Content-Type: application/json" \
     --request "POST" \

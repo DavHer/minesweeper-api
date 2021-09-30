@@ -20,13 +20,15 @@ type Cell struct {
 type Grid []Cell
 
 type Game struct {
-	Id        string `json:"id"`
-	Rows      int    `json:"rows"`
-	Cols      int    `json:"cols"`
-	Board     []Grid `json:"board,omitempty"`
-	Mines     int    `json:"mines"`
-	NumClicks int    `json:"numClicks,omitempty"`
-	State     string `json:"state,omitempty"`
+	Id           string  `json:"id"`
+	Rows         int     `json:"rows"`
+	Cols         int     `json:"cols"`
+	Board        []Grid  `json:"board,omitempty"`
+	Mines        int     `json:"mines"`
+	NumClicks    int     `json:"numClicks,omitempty"`
+	State        string  `json:"state,omitempty"`
+	CreateTime   float64 `json:"createTime,omitempty"`
+	ConsumedTime float64 `json:"consumedTime,omitempty"`
 }
 
 // Game are stored in this map for now
@@ -63,8 +65,13 @@ func Start(id string) (*Game, error) {
 	}
 
 	gameToStart.CreateBoard()
+	gameToStart.CreateTime = float64(time.Now().Unix())
 	gameToStart.State = "started"
 	return gameToStart, nil
+}
+
+func (g *Game) UpdateTimer() {
+	g.ConsumedTime = float64(time.Now().Unix()) - g.CreateTime
 }
 
 func (g *Game) CreateBoard() error {

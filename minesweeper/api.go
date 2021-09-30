@@ -43,6 +43,7 @@ func getGame(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "game not found"})
 		return
 	}
+	game.UpdateTimer()
 	c.IndentedJSON(http.StatusOK, game)
 }
 
@@ -54,6 +55,7 @@ func startGame(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 	}
 
+	game.UpdateTimer()
 	c.IndentedJSON(http.StatusCreated, game)
 }
 
@@ -77,6 +79,7 @@ func revealCell(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
+	game.UpdateTimer()
 
 	c.IndentedJSON(http.StatusOK, game)
 }
@@ -101,6 +104,7 @@ func flagCell(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
+	game.UpdateTimer()
 
 	c.IndentedJSON(http.StatusOK, game)
 }
