@@ -27,8 +27,8 @@ type Game struct {
 	Mines        int     `json:"mines"`
 	NumClicks    int     `json:"numClicks,omitempty"`
 	State        string  `json:"state,omitempty"`
-	CreateTime   float64 `json:"createTime,omitempty"`
-	ConsumedTime float64 `json:"consumedTime,omitempty"`
+	CreateTime   float64 `json:"createTime"`
+	ConsumedTime float64 `json:"consumedTime"`
 }
 
 // Game are stored in this map for now
