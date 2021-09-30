@@ -34,6 +34,8 @@ type Game struct {
 // Game are stored in this map for now
 var games map[string]*Game
 
+const WON, EXPLODED string = "won", "exploded"
+
 func init() {
 	rand.Seed(time.Now().Unix())
 	games = make(map[string]*Game)
@@ -141,6 +143,15 @@ func (g *Game) String() (string, error) {
 }
 
 func (g *Game) revealCell(row, col int) error {
+	if g.State == EXPLODED || g.State == WON {
+		return errors.New("Game already finished")
+	}
+	if row >= g.Rows || row < 0 {
+		return errors.New("Invalid row")
+	}
+	if col >= g.Cols || col < 0 {
+		return errors.New("Invalid column")
+	}
 	if g.Board[row][col].IsClicked {
 		return errors.New("Cell already clicked")
 	}
@@ -150,16 +161,25 @@ func (g *Game) revealCell(row, col int) error {
 		g.NumClicks += 1
 		g.revealAdjacents(row, col)
 		if g.NumClicks == ((g.Rows * g.Cols) - g.Mines) {
-			g.State = "won"
+			g.State = WON
 		}
 	} else {
-		g.State = "exploded"
+		g.State = EXPLODED
 	}
 
 	return nil
 }
 
 func (g *Game) flagCell(row, col int) error {
+	if g.State == EXPLODED || g.State == WON {
+		return errors.New("Game already finished")
+	}
+	if row >= g.Rows || row < 0 {
+		return errors.New("Invalid row")
+	}
+	if col >= g.Cols || col < 0 {
+		return errors.New("Invalid column")
+	}
 	if g.Board[row][col].IsClicked {
 		return errors.New("Cell already clicked")
 	}
