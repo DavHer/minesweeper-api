@@ -1,28 +1,38 @@
 package main
 
-import "fmt"
+/*
+Create game
+curl http://localhost:8080/minesweeper \
+    --include \
+    --header "Content-Type: application/json" \
+    --request "POST" \
+    --data '{"rows": 5, "cols": 5, "mines": 5}'
+
+Get game
+curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc
+
+
+Start game
+curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc/start \
+    --include \
+    --header "Content-Type: application/json" \
+    --request "POST"
+
+Reveal cell
+curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc/reveal \
+    --include \
+    --header "Content-Type: application/json" \
+    --request "POST" \
+    --data '{"row": 0, "col": 0}'
+
+Flag cell
+curl http://localhost:8080/minesweeper/00e572f8-603e-4f40-82dd-0083f6717bbc/flag \
+    --include \
+    --header "Content-Type: application/json" \
+    --request "POST" \
+    --data '{"row": 0, "col": 1}'
+*/
 
 func main() {
-	game := Game{
-		Id:    "game1",
-		Rows:  5,
-		Cols:  5,
-		Mines: 5,
-	}
-
-	if err := Create(&game); err != nil {
-		fmt.Println(err.Error())
-	}
-
-	if err := Start(game.Id); err != nil {
-		fmt.Println(err.Error())
-	}
-
-	fmt.Println(game.String())
-
-	game.revealCell(0, 2)
-	game.revealCell(0, 3)
-	game.revealCell(0, 4)
-
-	fmt.Println(game.String())
+	StartApi()
 }

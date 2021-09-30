@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Cell struct {
@@ -21,10 +23,10 @@ type Game struct {
 	Id        string `json:"id"`
 	Rows      int    `json:"rows"`
 	Cols      int    `json:"cols"`
-	Board     []Grid `json:"board"`
+	Board     []Grid `json:"board,omitempty"`
 	Mines     int    `json:"mines"`
-	NumClicks int    `json:"numClicks"`
-	State     string `json:"state"`
+	NumClicks int    `json:"numClicks,omitempty"`
+	State     string `json:"state,omitempty"`
 }
 
 // Game are stored in this map for now
@@ -36,9 +38,6 @@ func init() {
 }
 
 func Create(g *Game) error {
-	if g.Id == "" {
-		return errors.New("Game need an Id")
-	}
 	if g.Rows == 0 {
 		return errors.New("Game need a number of rows")
 	}
@@ -49,22 +48,23 @@ func Create(g *Game) error {
 		return errors.New("Game need a number of mines")
 	}
 
+	g.Id = uuid.New().String()
 	g.State = "created"
 	games[g.Id] = g
 
 	return nil
 }
 
-func Start(id string) error {
+func Start(id string) (*Game, error) {
 	var gameToStart *Game
 	var ok bool
 	if gameToStart, ok = games[id]; !ok {
-		return errors.New("Game not found")
+		return nil, errors.New("Game not found")
 	}
 
 	gameToStart.CreateBoard()
 	gameToStart.State = "started"
-	return nil
+	return gameToStart, nil
 }
 
 func (g *Game) CreateBoard() error {
