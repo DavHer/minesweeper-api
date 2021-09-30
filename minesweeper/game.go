@@ -141,6 +141,7 @@ func (g *Game) revealCell(row, col int) error {
 
 	if !g.Board[row][col].IsMine {
 		g.NumClicks += 1
+		g.revealAdjacents(row, col)
 		if g.NumClicks == ((g.Rows * g.Cols) - g.Mines) {
 			g.State = "won"
 		}
@@ -158,4 +159,78 @@ func (g *Game) flagCell(row, col int) error {
 	g.Board[row][col].IsFlagged = true
 
 	return nil
+}
+
+func (g *Game) revealAdjacents(row, col int) {
+
+	// go down
+	for i := row + 1; i < g.Rows; i++ {
+		if g.Board[i][col].IsClicked || g.Board[i][col].IsMine || g.Board[i][col].Value != 0 {
+			break
+		}
+		g.expandCell(i, col)
+	}
+	// go up
+	for i := row - 1; i >= 0; i-- {
+		if g.Board[i][col].IsClicked || g.Board[i][col].IsMine || g.Board[i][col].Value != 0 {
+			break
+		}
+		g.expandCell(i, col)
+	}
+	// go left
+	for i := col - 1; i >= 0; i-- {
+		if g.Board[row][i].IsClicked || g.Board[row][i].IsMine || g.Board[row][i].Value != 0 {
+			break
+		}
+		g.expandCell(row, i)
+	}
+	// go right
+	for i := row + 1; i < g.Rows; i++ {
+		if g.Board[row][i].IsClicked || g.Board[row][i].IsMine || g.Board[row][i].Value != 0 {
+			break
+		}
+		g.expandCell(row, i)
+	}
+
+	// go down right
+	for i := row + 1; i < g.Rows; i++ {
+		if g.Board[i][i].IsClicked || g.Board[i][i].IsMine || g.Board[i][i].Value != 0 {
+			break
+		}
+		g.expandCell(i, i)
+	}
+	// go down left
+	j := (col - 1)
+	for i := (row + 1); i < g.Rows && j >= 0; i++ {
+		if g.Board[i][j].IsClicked || g.Board[i][j].IsMine || g.Board[i][j].Value != 0 {
+			break
+		}
+		g.expandCell(i, j)
+		j--
+	}
+
+	// go up right
+	j = (col + 1)
+	for i := row - 1; i >= 0 && j < g.Cols; i-- {
+		if g.Board[i][j].IsClicked || g.Board[i][j].IsMine || g.Board[i][j].Value != 0 {
+			break
+		}
+		g.expandCell(i, j)
+		j++
+	}
+
+	// go up left
+	for i := row - 1; i >= 0; i-- {
+		if g.Board[i][i].IsClicked || g.Board[i][i].IsMine || g.Board[i][i].Value != 0 {
+			break
+		}
+		g.expandCell(i, i)
+	}
+}
+
+func (g *Game) expandCell(row, col int) {
+	if g.Board[row][col].Value == 0 && !g.Board[row][col].IsMine {
+		g.Board[row][col].IsClicked = true
+		g.NumClicks++
+	}
 }
